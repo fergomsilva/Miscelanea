@@ -1,0 +1,12 @@
+.settings/
+bin/
+log/
+target/
+classes/
+test-classes/
+*.class
+*.log
+.classpath
+.project
+*.lock.db
+*.trace.db
