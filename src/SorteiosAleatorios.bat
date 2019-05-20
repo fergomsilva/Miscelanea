@@ -1,2 +1,2 @@
-java -classpath . br.com.engsoftsis.sorteiosaleatorios.Principal
+java -classpath . br.com.engsoftsis.sorteiosaleatorios.SorteiosAleatorios
 pause

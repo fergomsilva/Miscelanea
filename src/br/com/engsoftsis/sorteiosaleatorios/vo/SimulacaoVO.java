@@ -4,20 +4,19 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import br.com.engsoftsis.sorteiosaleatorios.enumerations.ENUM_TIPO_CONTAGEM;
 import br.com.engsoftsis.sorteiosaleatorios.utils.Constantes;
 
 
 public class SimulacaoVO{
     private int qtdJogos;
     private int qtdRetiradas;
-    private int qtdMinimaRetiradas;
+    private ParametroVO parametro;
     private List<DezenaQtdVO> dezenas;
     
-    public SimulacaoVO(final int qtdMinimaRetiradas){
+    public SimulacaoVO(final ParametroVO param){
         super();
-        this.qtdMinimaRetiradas = qtdMinimaRetiradas;
-        if( this.qtdMinimaRetiradas < 1 )
-            this.qtdMinimaRetiradas = Constantes.QTD_MIN_RETIRADA;
+        this.parametro = param;
         this.dezenas = new ArrayList<>( Constantes.MAIOR_DEZENA );
         for( int i = 1; i <= Constantes.MAIOR_DEZENA; i++ )
             this.dezenas.add( new DezenaQtdVO( i ) );
@@ -48,14 +47,12 @@ public class SimulacaoVO{
         return this.qtdRetiradas;
     }
     
-    public int getQtdMinimaRetiradas()
-    {
-        return this.qtdMinimaRetiradas;
-    }
-    
     public boolean isQtdRetiradasOK()
     {
-        return this.getQtdRetiradas() >= this.getQtdMinimaRetiradas();
+        if( ENUM_TIPO_CONTAGEM.RETIRADAS == this.parametro.getTipoContagem() ) {
+            return this.getQtdRetiradas() >= this.parametro.getQtdTotal();
+        }
+        return this.getQtdJogos() >= this.parametro.getQtdTotal();
     }
     
     public DezenaQtdVO getDadosDezena(final int dezena)
