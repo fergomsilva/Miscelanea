@@ -1,20 +1,20 @@
-package br.com.engsoftsis.sorteiosaleatorios;
+package br.com.engsoftsis.sorteiosaleatorios.services;
 
 import java.util.Random;
 
-import br.com.engsoftsis.sorteiosaleatorios.utils.Util;
+import br.com.engsoftsis.sorteiosaleatorios.utils.Constantes;
 
 
-class Globo extends Thread{
+class GloboThread extends Thread{
     private static final Random RANDOM = new Random();
     
     private Integer dezena = 0;
     private Boolean ligado = Boolean.TRUE;
     
     
-    public Globo(final int globo)
+    public GloboThread(final int globo)
     {
-        super( Util.THREAD_GROUP_GLOBOS, "Globo" + globo );
+        super( SorteioService.THREAD_GROUP_GLOBOS, "Globo" + globo );
         super.setDaemon( false );
     }
 
@@ -23,7 +23,7 @@ class Globo extends Thread{
     {
         do{
             synchronized( this.dezena ){
-                this.dezena = Globo.RANDOM.nextInt( Util.MAIOR_DEZENA ) + 1;
+                this.dezena = GloboThread.RANDOM.nextInt( Constantes.MAIOR_DEZENA ) + 1;
             }
         }while( this.ligado );
     }

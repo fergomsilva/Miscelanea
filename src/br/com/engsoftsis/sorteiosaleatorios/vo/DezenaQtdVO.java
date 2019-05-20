@@ -55,7 +55,7 @@ public class DezenaQtdVO implements Comparable<DezenaQtdVO>, Comparator<DezenaQt
     @Override
     public int compareTo(final DezenaQtdVO o)
     {
-        return -1 * Integer.compare( this.getQuantidade(), o.getQuantidade() );
+        return Integer.compare( this.getDezena(), o.getDezena() );
     }
 
 }
