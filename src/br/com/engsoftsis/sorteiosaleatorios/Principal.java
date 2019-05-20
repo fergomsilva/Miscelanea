@@ -17,15 +17,15 @@ public class Principal{
             
             SorteioService.ligarGlobos();
             
-            final SimulacaoVO resultado = new SimulacaoVO();
+            final SimulacaoVO resultado = new SimulacaoVO( Constantes.QTD_MIN_RETIRADA );
             do{
                 resultado.contabilizarDezenasJogo( SorteioService.sortear() );
-            }while( resultado.getQtdRetiradas() < Constantes.QTD_MIN_RETIRADA );
+            }while( !resultado.isQtdRetiradasOK() );
             System.out.println( String.format( "Qtd total retiradas: %,d%s", resultado.getQtdRetiradas(), System.lineSeparator() ) );
             
             resultado.sortByQuantidade( true );
             for( DezenaQtdVO dez : resultado.getPrimeiros( 10 ) )
-                System.out.println( String.format( "%2d: %,d - %.4f %%", dez.getDezena(), dez.getQuantidade(), ( dez.getQuantidade() / (double)resultado.getQtdRetiradas() * 100.0 ) ) );
+                System.out.println( String.format( "%2d: %,d - %.4f %%", dez.getDezena(), dez.getQuantidade(), dez.getPorcentagem() ) );
             
             SorteioService.desligarGlobos();
             

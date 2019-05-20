@@ -10,10 +10,14 @@ import br.com.engsoftsis.sorteiosaleatorios.utils.Constantes;
 public class SimulacaoVO{
     private int qtdJogos;
     private int qtdRetiradas;
+    private int qtdMinimaRetiradas;
     private List<DezenaQtdVO> dezenas;
     
-    public SimulacaoVO(){
+    public SimulacaoVO(final int qtdMinimaRetiradas){
         super();
+        this.qtdMinimaRetiradas = qtdMinimaRetiradas;
+        if( this.qtdMinimaRetiradas < 1 )
+            this.qtdMinimaRetiradas = Constantes.QTD_MIN_RETIRADA;
         this.dezenas = new ArrayList<>( Constantes.MAIOR_DEZENA );
         for( int i = 1; i <= Constantes.MAIOR_DEZENA; i++ )
             this.dezenas.add( new DezenaQtdVO( i ) );
@@ -25,6 +29,8 @@ public class SimulacaoVO{
             this.getDadosDezena( d ).addQuantidade();
         ++this.qtdJogos;
         this.qtdRetiradas += jogo.length;
+        for( DezenaQtdVO dez : this.getDezenas() )
+            dez.calcularPorcentagem( this.qtdRetiradas );
     }
     
     public List<DezenaQtdVO> getDezenas()
@@ -40,6 +46,16 @@ public class SimulacaoVO{
     public int getQtdRetiradas()
     {
         return this.qtdRetiradas;
+    }
+    
+    public int getQtdMinimaRetiradas()
+    {
+        return this.qtdMinimaRetiradas;
+    }
+    
+    public boolean isQtdRetiradasOK()
+    {
+        return this.getQtdRetiradas() >= this.getQtdMinimaRetiradas();
     }
     
     public DezenaQtdVO getDadosDezena(final int dezena)

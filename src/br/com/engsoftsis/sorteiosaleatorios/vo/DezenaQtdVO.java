@@ -6,6 +6,7 @@ import java.util.Objects;
 public class DezenaQtdVO implements Comparable<DezenaQtdVO>, Comparator<DezenaQtdVO> {
     private int dezena;
     private int quantidade;
+    private double porcentagem;
     
     public DezenaQtdVO(final int dezena)
     {
@@ -24,11 +25,21 @@ public class DezenaQtdVO implements Comparable<DezenaQtdVO>, Comparator<DezenaQt
         return this.quantidade;
     }
     
+    public double getPorcentagem()
+    {
+        return this.porcentagem;
+    }
+    
     public void addQuantidade()
     {
         ++this.quantidade;
     }
-
+    
+    public void calcularPorcentagem(final int qtdTotal)
+    {
+        this.porcentagem = ( this.getQuantidade() / (double)qtdTotal * 100.0 );
+    }
+    
     @Override
     public int hashCode(){
         return Objects.hash( this.getDezena() );
