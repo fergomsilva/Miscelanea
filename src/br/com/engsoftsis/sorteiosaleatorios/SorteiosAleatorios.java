@@ -3,8 +3,11 @@ package br.com.engsoftsis.sorteiosaleatorios;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
+import javax.swing.JOptionPane;
+
 import br.com.engsoftsis.sorteiosaleatorios.enumerations.ENUM_TIPO_CONTAGEM;
 import br.com.engsoftsis.sorteiosaleatorios.services.SorteioService;
+import br.com.engsoftsis.sorteiosaleatorios.utils.Constantes;
 import br.com.engsoftsis.sorteiosaleatorios.vo.ParametroVO;
 import br.com.engsoftsis.sorteiosaleatorios.vo.SimulacaoVO;
 
@@ -29,21 +32,7 @@ public class SorteiosAleatorios{
     
     private static final void mostrarInstrucoes()
     {
-        System.out.println( "Par\u00E2metros permitidos: " );
-        System.out.println( "  1\u00BA CEN\u00C1RIO: " );
-        System.out.println( "    SorteiosAleatorios <qtd>" );
-        System.out.println( "      <qtd> - apenas valor num\u00E9rico. Representa a quantidade de retiradas de " );
-        System.out.println( "                                             dezenas m\u00EDnima para a simula\u00E7\u00E3o." );
-        System.out.println( "  2\u00BA CEN\u00C1RIO: " );
-        System.out.println( "    SorteiosAleatorios <qtd> <jogos|retiradas|dezenas>" );
-        System.out.println( "      <qtd> - apenas valor num\u00E9rico." );
-        System.out.println( "      <tipoQtd> - valores poss\u00EDveis [jogos|retiradas|dezenas]." );
-        System.out.println( "                - se informado 'jogos',  o programa considera  o valor num\u00E9rico " );
-        System.out.println( "                    informado no  par\u00E2metro anterior anterior  com a  quantidade " );
-        System.out.println( "                                                             de jogos simulados;" );
-        System.out.println( "                - se informado 'retiradas' ou 'dezenas', o programa considera o " );
-        System.out.println( "                    valor num\u00E9rico informado no par\u00E2metro anterior com a quanti-" );
-        System.out.println( "                           dade m\u00EDnima de retiradas de dezenas para a simula\u00E7\u00E3o;" );
+        System.out.println( Constantes.INSTRUCOES );
     }
     
     private static final ParametroVO validarArgumentos(final String... args)
@@ -71,15 +60,28 @@ public class SorteiosAleatorios{
             }
         }
         if( param.hasErros() ) {
+            final StringBuilder mensagens = new StringBuilder();
             System.out.println( "\n" );
-            param.getErros().forEach( e -> System.out.println( e ) );
+            param.getErros().forEach( e -> {
+                mensagens.append( e );
+                mensagens.append( System.lineSeparator() );
+                System.out.println( e );
+            } );
+            
+            mensagens.append( System.lineSeparator() );
+            mensagens.append( "INSTRU\u00C7\u00D5ES: " );
+            mensagens.append( System.lineSeparator() );
+            mensagens.append( Constantes.INSTRUCOES );
+            JOptionPane.showMessageDialog( null, mensagens, "ERRO", JOptionPane.ERROR_MESSAGE );
         }
         return param;
     }
     
     public static void main(final String... args)
     {
+        Constantes.carregarTextoInstrucoes();
         SorteiosAleatorios.mostrarInstrucoes();
+        
         final ParametroVO param = SorteiosAleatorios.validarArgumentos( args );
         if( param.hasErros() )
             System.exit( -1 );
