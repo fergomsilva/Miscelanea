@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 import javax.swing.JOptionPane;
+import javax.swing.JTextArea;
 
 import br.com.engsoftsis.sorteiosaleatorios.enumerations.ENUM_TIPO_CONTAGEM;
 import br.com.engsoftsis.sorteiosaleatorios.services.SorteioService;
@@ -13,7 +14,7 @@ import br.com.engsoftsis.sorteiosaleatorios.vo.SimulacaoVO;
 
 public class SorteiosAleatorios{
     
-    private static final SimulacaoVO gerarSimulacao(final ParametroVO param) throws Exception
+    private static final SimulacaoVO gerarSimulacao(final ParametroVO param)
     {
         final SimulacaoVO resultado = new SimulacaoVO( param );
         do{
@@ -23,11 +24,16 @@ public class SorteiosAleatorios{
         return resultado;
     }
     
-    private static final void processarSimulacao(final SimulacaoVO simulacao) throws Exception
+    private static final void processarSimulacao(final SimulacaoVO simulacao)
     {
+        final StringBuilder buffer = new StringBuilder();
         simulacao.sortByQuantidade( true );
-        simulacao.getPrimeiros( 10 ).forEach( dez 
-            -> System.out.println( String.format( "%2d: %,d - %.4f %%", dez.getDezena(), dez.getQuantidade(), dez.getPorcentagem() ) ) );
+        simulacao.getPrimeiros( 10 ).forEach( dez -> {
+            buffer.append( String.format( "%2d: %,d - %.4f %%", dez.getDezena(), dez.getQuantidade(), dez.getPorcentagem() ) );
+            buffer.append( System.lineSeparator() );
+            System.out.println( String.format( "%2d: %,d - %.4f %%", dez.getDezena(), dez.getQuantidade(), dez.getPorcentagem() ) );
+        } );
+        JOptionPane.showMessageDialog( null, new JTextArea( buffer.toString() ), "Simula\u00E7\u00E3o", JOptionPane.INFORMATION_MESSAGE );
     }
     
     private static final void mostrarInstrucoes()
@@ -77,14 +83,32 @@ public class SorteiosAleatorios{
         return param;
     }
     
+    private static final void sairSeErro(final ParametroVO param)
+    {
+        if( param.hasErros() )
+            System.exit( -1 );
+    }
+    
     public static void main(final String... args)
     {
         Constantes.carregarTextoInstrucoes();
         SorteiosAleatorios.mostrarInstrucoes();
         
-        final ParametroVO param = SorteiosAleatorios.validarArgumentos( args );
-        if( param.hasErros() )
-            System.exit( -1 );
+        ParametroVO param = SorteiosAleatorios.validarArgumentos( args );
+        SorteiosAleatorios.sairSeErro( param );
+        
+        if( args == null || args.length < 1 ) {
+            final String[] args2 = { "", "" };
+            args2[ 0 ] = JOptionPane.showInputDialog( null, "Quantidade: ", "Par\u00E2metro: Quantidade M\u00EDnima Retiradas", 
+                JOptionPane.QUESTION_MESSAGE );
+            final ENUM_TIPO_CONTAGEM tipo = (ENUM_TIPO_CONTAGEM)JOptionPane.showInputDialog( null, "Tipo: ", "Par\u00E2metro: Tipo Retirada", 
+                JOptionPane.QUESTION_MESSAGE, null, ENUM_TIPO_CONTAGEM.values(), ENUM_TIPO_CONTAGEM.RETIRADAS );
+            if( tipo != null ) 
+                args2[ 1 ] = tipo.toString();
+            param = SorteiosAleatorios.validarArgumentos( args2 );
+            SorteiosAleatorios.sairSeErro( param );
+        }
+        
         try{
             final LocalDateTime inicio = LocalDateTime.now();
             System.out.println( String.format( "%s%sINICIO: %s", System.lineSeparator(), System.lineSeparator(), inicio ) );
