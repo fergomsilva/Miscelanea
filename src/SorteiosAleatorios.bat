@@ -1,2 +1,2 @@
-java -classpath . br.com.engsoftsis.sorteiosaleatorios.SorteiosAleatorios
+java -cp ".\;.\bin;" br.com.engsoftsis.sorteiosaleatorios.SorteiosAleatorios
 pause
